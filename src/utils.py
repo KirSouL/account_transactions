@@ -1,44 +1,49 @@
+# импорт библиотеки datetime для работы с форматом дата-время
 from datetime import datetime
 
 
-def from_founds(value):
+def mask_card(value: list):
+    """
+    Функция кодировки номера карты
+    :param value: передается список с наименованием и номером карты.
+                    Пример списков:
+                    ['Maestro', '1234123412341234'],
+                    ['Visa', 'Platinum', '1234123412341234']
+    :return: если длина строки равна 16 и список состоит из 2-х элементов,
+                то возвращается строка содержащая зашифрованный номер карты. Пример: "Maestro 1234 12** **** 1234"
+             если  если длина строки равна 16 и список состоит из 3-х элементов,
+    """
+    if len(value) == 2:
+        new_card = "".join(value[0] + " " + (value[-1][:4] + " " + value[-1][4:6] + "** " + "**** " + value[-1][-4:]))
+        return new_card
 
-    if "from" in value:
-        base_str = value["from"].split(" ")
-        accrual_of_funds = value["from"].split(" ")[-1]
-        if len(accrual_of_funds) == 16 and len(base_str) == 2:
-            new_card = "".join(base_str[0] + " " + (accrual_of_funds[:4] + " " + accrual_of_funds[4:6]
-                                                    + "** " + "**** " + accrual_of_funds[-4:]))
-            return new_card
-        elif len(accrual_of_funds) == 16 and len(base_str) == 3:
-            new_card = "".join(base_str[0] + base_str[1] + " " + (accrual_of_funds[:4] + " " + accrual_of_funds[4:6]
-                                                                  + "** " + "**** " + accrual_of_funds[-4:]))
-            return new_card
-        else:
-            new_score = "".join(base_str[0] + " " + "**" + accrual_of_funds[-4:])
-            return new_score
-
-
-def to_founds(value):
-
-    if "to" in value:
-        base_str = value["to"].split(" ")
-        accrual_of_funds = value["to"].split(" ")[-1]
-        if len(accrual_of_funds) == 16 and len(base_str) == 2:
-            new_card = "".join(base_str[0] + " " + (accrual_of_funds[:4] + " " + accrual_of_funds[4:6]
-                                                    + "**" + " " + "****" + " " + accrual_of_funds[-4:]))
-            return new_card
-        elif len(accrual_of_funds) == 16 and len(base_str) == 3:
-            new_card = "".join(base_str[0] + base_str[1] + " " + (accrual_of_funds[:4] + " " + accrual_of_funds[4:6]
-                                                                  + "** " + "**** " + accrual_of_funds[-4:]))
-            return new_card
-        else:
-            new_score = "".join(base_str[0] + " " + "**" + accrual_of_funds[-4:])
-            return new_score
+    elif len(value) == 3:
+        new_card = "".join(value[0] + " " + value[1] + " " + (value[-1][:4] + " " + value[-1][4:6]
+                                                              + "** " + "**** " + value[-1][-4:]))
+        return new_card
 
 
-def date_operation(value):
+def mask_account(value: list):
+    """
+    Функция кодировки номера счета
+    :param value: передается список содержащий номер счета
+                    Пример содержимого списка:
+                    ['Счет', '12341234123412341234']
+    :return: возвращается строка содержащая зашифрованный номер счета. Пример: "Счет **1232"
+    """
+    new_score = "".join(value[0] + " " + "**" + value[-1][-4:])
+    return new_score
 
-    date_ = datetime.strftime(datetime.strptime(value["date"], "%Y-%m-%dT%H:%M:%S.%f"), format="%d.%m.%Y")
+
+def date_operation(value: str):
+    """
+    Функция преобразования даты из получаемой строки
+    :param value: передается строка в которой содержится точнаяф дата операции.
+                        Пример строки:
+                        "2018-11-29T07:18:23.941293"
+    :return: возвращается дата операуии, приведенная к виду: ДД.ММ.ГГГГ
+    """
+
+    date_ = datetime.strftime(datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f"), format="%d.%m.%Y")
 
     return date_
