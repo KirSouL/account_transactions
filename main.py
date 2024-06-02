@@ -1,4 +1,4 @@
-from utils import from_founds, to_founds, date_operation
+from utils import get_mask, date_operation
 from loadfile import sorted_executed_operation
 
 
@@ -6,15 +6,22 @@ def main():
     list_operation = sorted_executed_operation()[:5]
 
     for item in list_operation:
-        from_ = from_founds(item)
+        date_ = date_operation(item["date"])
+
+        if "from" in item:
+            from_ = get_mask(item["from"].split(" "))
+            to_ = get_mask(item["to"].split(" "))
+        else:
+            from_ = None
+            to_ = get_mask(item["to"].split(" "))
 
         if from_ is None:
-            print(f"{date_operation(item)} {item["description"]}\n"
-                  f"{to_founds(item)}\n"
+            print(f"{date_} {item["description"]}\n"
+                  f"{to_}\n"
                   f"{item["operationAmount"]["amount"]} {item["operationAmount"]["currency"]["name"]}\n")
         else:
-            print(f"{date_operation(item)} {item["description"]}\n"
-                  f"{from_} -> {to_founds(item)}\n"
+            print(f"{date_} {item["description"]}\n"
+                  f"{from_} -> {to_}\n"
                   f"{item["operationAmount"]["amount"]} {item["operationAmount"]["currency"]["name"]}\n")
 
 
