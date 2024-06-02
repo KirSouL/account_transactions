@@ -3,11 +3,11 @@ Displays detailed information on operations in the console,
 as in the example below:
 
 "26.08.2019 Перевод организации
-Maestro 1596 83** **** 5199 -> Счет **9589
+Maestro 1515 15** **** 1515 -> Счет **0003
 31957.58 руб.
 
 19.08.2019 Перевод организации
-Счет **4901 -> Счет **7621
+Счет **0001 -> Счет **0007
 81150.87 USD
 
 ..."
